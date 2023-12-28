@@ -1,0 +1,326 @@
+HW: Data Transformation in R Language Programming
+  ## See in Notion in below link
+  ## https://scrumptious-and-sensible-saimai-pannat-around-the-world.notion.site/scrumptious-and-sensible-saimai-pannat-around-the-world/HW-Data-Transformation-in-R-Language-Programming-99eecd4483354577b4e922348338dbb1
+HW1: nycflights13 analysis
+This section focuses on the analysis of questions using two datasets, namely "flights" and "airlines" from the "nycflights13" library in R programming. The code to answer the questions are written in R programming language.
+Q1 : most flight carrier in Sep 2013
+code:
+flights %>%
+  filter(month == 9, year == 2013) %>%
+  count(carrier) %>%
+  arrange(desc(n)) %>%
+  head(5) %>%
+  left_join(airlines)
+​
+Console:
+> ## Q1. most flight carrier in Sep 2013
+> flights %>%
++   filter(month == 9, year == 2013) %>%
++   count(carrier) %>%
++   arrange(desc(n)) %>%
++   head(5) %>%
++   left_join(airlines)
+Joining with `by = join_by(carrier)`
+# A tibble: 5 × 3
+  carrier     n name                    
+  <chr>   <int> <chr>                   
+1 EV       4725 ExpressJet Airlines Inc.
+2 UA       4694 United Air Lines Inc.   
+3 B6       4291 JetBlue Airways         
+4 DL       3883 Delta Air Lines Inc.    
+5 AA       2614 American Airlines Inc.
+​
+>> EV (ExpressJet Airlines Inc.) has the most flights in September 2013
+Q2 : which carrier has the most departure/arrival delay time (minutes) in Sep 2013
+code:
+flights %>%
+  filter(month == 9, year == 2013, dep_delay > 0, arr_delay >0) %>%
+  group_by(carrier) %>%
+  summarise(sum_dep_delay = sum(dep_delay), sum_arr_delay = sum(arr_delay)) %>%
+  arrange(desc(sum_dep_delay),desc(sum_arr_delay)) %>%
+  left_join(airlines)
+​
+Console:
+> ## Q2. which carrier has the most departure/arrival delays in Sep 2013
+> flights %>%
++   filter(month == 9, year == 2013, dep_delay > 0, arr_delay >0) %>%
++   group_by(carrier) %>%
++   summarise(sum_dep_delay = sum(dep_delay), sum_arr_delay = sum(arr_delay)) %>%
++   arrange(desc(sum_dep_delay),desc(sum_arr_delay)) %>%
++   left_join(airlines)
+Joining with `by = join_by(carrier)`
+# A tibble: 16 × 4
+   carrier sum_dep_delay sum_arr_delay name                       
+   <chr>           <dbl>         <dbl> <chr>                      
+ 1 EV              51606         46972 ExpressJet Airlines Inc.   
+ 2 B6              40594         38529 JetBlue Airways            
+ 3 UA              39220         36968 United Air Lines Inc.      
+ 4 DL              30976         30645 Delta Air Lines Inc.       
+ 5 AA              21387         19754 American Airlines Inc.     
+ 6 MQ              19099         19736 Envoy Air                  
+ 7 9E              14986         12660 Endeavor Air Inc.          
+ 8 WN              14002         13258 Southwest Airlines Co.     
+ 9 US              10559         10761 US Airways Inc.            
+10 FL               4905          4855 AirTran Airways Corporation
+11 VX               3976          3718 Virgin America             
+12 YV                521           487 Mesa Airlines Inc.         
+13 F9                479           565 Frontier Airlines Inc.     
+14 AS                 42            12 Alaska Airlines Inc.       
+15 OO                 40            48 SkyWest Airlines Inc.      
+16 HA                  1            23 Hawaiian Airlines Inc.     
+
+​
+>> EV (ExpressJet Airlines Inc.) has the departure/arrival delays (minutes) in September 2013
+Q3 : which carrier has the most departure/arrival delay time (minutes) in 2013
+code:
+flights %>%
+  filter(year == 2013, dep_delay > 0, arr_delay >0) %>%
+  group_by(carrier) %>%
+  summarise(sum_dep_delay = sum(dep_delay), sum_arr_delay = sum(arr_delay)) %>%
+  arrange(desc(sum_dep_delay),desc(sum_arr_delay)) %>%
+  left_join(airlines)
+​
+Console:
+> ## Q3. which carrier has the most departure/arrival delay mins in 2013
+> 
+> flights %>%
++   filter(year == 2013, dep_delay > 0, arr_delay >0) %>%
++   group_by(carrier) %>%
++   summarise(sum_dep_delay = sum(dep_delay), sum_arr_delay = sum(arr_delay)) %>%
++   arrange(desc(sum_dep_delay),desc(sum_arr_delay)) %>%
++   left_join(airlines)
+Joining with `by = join_by(carrier)`
+# A tibble: 16 × 4
+   carrier sum_dep_delay sum_arr_delay name                       
+   <chr>           <dbl>         <dbl> <chr>                      
+ 1 EV            1126959       1122908 ExpressJet Airlines Inc.   
+ 2 B6             811751        847894 JetBlue Airways            
+ 3 UA             730098        737219 United Air Lines Inc.      
+ 4 DL             526315        537263 Delta Air Lines Inc.       
+ 5 AA             350484        354070 American Airlines Inc.     
+ 6 MQ             348958        379371 Envoy Air                  
+ 7 9E             320730        306213 Endeavor Air Inc.          
+ 8 WN             211598        205723 Southwest Airlines Co.     
+ 9 US             150959        169291 US Airways Inc.            
+10 VX              68076         69854 Virgin America             
+11 FL              65464         71993 AirTran Airways Corporation
+12 F9              14635         16276 Frontier Airlines Inc.     
+13 YV              12017         12460 Mesa Airlines Inc.         
+14 AS               6339          5677 Alaska Airlines Inc.       
+15 HA               2797          2679 Hawaiian Airlines Inc.     
+16 OO                518           597 SkyWest Airlines Inc.
+​
+>> EV (ExpressJet Airlines Inc.) has the departure/arrival delays (minutes) in 2013
+Q4 : which month has the most departure/arrival delay time (minutes) in 2013
+code:
+flights %>%
+  filter(year == 2013, dep_delay > 0, arr_delay >0) %>%
+  group_by(month) %>%
+  summarise(sum_dep_delay = sum(dep_delay), sum_arr_delay = sum(arr_delay)) %>%
+  arrange(desc(sum_dep_delay),desc(sum_arr_delay))
+​
+Console:
+> ## Q4. which month has the most departure/arrival delay mins in 2013
+> 
+> flights %>%
++   filter(year == 2013, dep_delay > 0, arr_delay >0) %>%
++   group_by(month) %>%
++   summarise(sum_dep_delay = sum(dep_delay), sum_arr_delay = sum(arr_delay)) %>%
++   arrange(desc(sum_dep_delay),desc(sum_arr_delay)) 
+# A tibble: 12 × 3
+   month sum_dep_delay sum_arr_delay
+   <int>         <dbl>         <dbl>
+ 1     7        640559        668326
+ 2     6        600469        625798
+ 3    12        477699        516377
+ 4     4        445827        473728
+ 5     3        417442        409077
+ 6     5        409085        394676
+ 7     8        405995        410955
+ 8     1        322285        337272
+ 9     2        302077        300452
+10    10        255196        242673
+11     9        252393        238991
+12    11        218671        221163
+​
+>> July (month 7)has the most departure/arrival delay time (minutes) in 2013
+Q5 : which carrier has the most early departure/arrival time (minutes) in 2013
+code:
+flights %>%
+  filter(year == 2013, dep_delay < 0, arr_delay < 0) %>%
+  group_by(carrier) %>%
+  summarise(sum_dep_delay = sum(dep_delay), sum_arr_delay = sum(arr_delay)) %>%
+  arrange(sum_dep_delay,sum_arr_delay) %>%
+  left_join(airlines)
+​
+Console:
+## Q5. which carrier has the most early departure/arrival time in 2013
+> 
+> flights %>%
++   filter(year == 2013, dep_delay < 0, arr_delay < 0) %>%
++   group_by(carrier) %>%
++   summarise(sum_dep_delay = sum(dep_delay), sum_arr_delay = sum(arr_delay)) %>%
++   arrange(sum_dep_delay,sum_arr_delay) %>%
++   left_join(airlines)
+Joining with `by = join_by(carrier)`
+# A tibble: 16 × 4
+   carrier sum_dep_delay sum_arr_delay name                       
+   <chr>           <dbl>         <dbl> <chr>                      
+ 1 B6            -118499       -359653 JetBlue Airways            
+ 2 EV            -116285       -332375 ExpressJet Airlines Inc.   
+ 3 DL            -103776       -440673 Delta Air Lines Inc.       
+ 4 UA             -95082       -435645 United Air Lines Inc.      
+ 5 AA             -84241       -332444 American Airlines Inc.     
+ 6 MQ             -72039       -159453 Envoy Air                  
+ 7 US             -64784       -158049 US Airways Inc.            
+ 8 9E             -46903       -166898 Endeavor Air Inc.          
+ 9 WN             -11863        -62103 Southwest Airlines Co.     
+10 VX              -8831        -45856 Virgin America             
+11 FL              -5559        -11848 AirTran Airways Corporation
+12 AS              -2568        -11172 Alaska Airlines Inc.       
+13 YV              -1669         -4190 Mesa Airlines Inc.         
+14 HA              -1117         -4820 Hawaiian Airlines Inc.     
+15 F9              -1016         -2613 Frontier Airlines Inc.     
+16 OO               -141          -254 SkyWest Airlines Inc.
+​
+>> B6 (JetBlue Airways) has the most early departure/arrival time (minutes) in 2013.
+Other additional questions
+code:
+## Q6. which flight has the departure delay mins >= 60 mins or arrive delay mins >= 60 mins
+filter(flights, (arr_delay>60 | dep_delay>60), year = 2013) 
+
+## Q7. which flight has the departure delay mins < 60 mins or arrive delay mins < 60 mins
+filter(flights, !(arr_delay>60 | dep_delay>60), year == 2013)
+​
+Console:
+## Q6. which flight has the departure delay mins >= 60 mins or arrive delay mins >= 60 mins
+> filter(flights, (arr_delay>=60 | dep_delay>=60), year == 2013) 
+# A tibble: 32,311 × 19
+    year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time arr_delay carrier flight tailnum origin dest  air_time distance  hour
+   <int> <int> <int>    <int>          <int>     <dbl>    <int>          <int>     <dbl> <chr>    <int> <chr>   <chr>  <chr>    <dbl>    <dbl> <dbl>
+ 1  2013     1     1      811            630       101     1047            830       137 MQ        4576 N531MQ  LGA    CLT        118      544     6
+ 2  2013     1     1      826            715        71     1136           1045        51 AA         443 N3GVAA  JFK    MIA        160     1089     7
+ 3  2013     1     1      848           1835       853     1001           1950       851 MQ        3944 N942MQ  JFK    BWI         41      184    18
+ 4  2013     1     1      957            733       144     1056            853       123 UA         856 N534UA  EWR    BOS         37      200     7
+ 5  2013     1     1     1114            900       134     1447           1222       145 UA        1086 N76502  LGA    IAH        248     1416     9
+ 6  2013     1     1     1120            944        96     1331           1213        78 EV        4495 N16561  EWR    SAV        117      708     9
+ 7  2013     1     1     1255           1200        55     1451           1330        81 MQ        4601 N518MQ  LGA    BNA        139      764    12
+ 8  2013     1     1     1301           1150        71     1518           1345        93 MQ        4646 N542MQ  LGA    MSP        170     1020    11
+ 9  2013     1     1     1337           1220        77     1649           1531        78 B6         673 N636JB  JFK    LAX        352     2475    12
+10  2013     1     1     1342           1320        22     1617           1504        73 EV        3832 N13969  EWR    STL        194      872    13
+# ℹ 32,301 more rows
+# ℹ 2 more variables: minute <dbl>, time_hour <dttm>
+# ℹ Use `print(n = ...)` to see more rows
+> 
+> ## Q7. which flight has the departure delay mins < 60 mins or arrive delay mins < 60 mins in each month
+> filter(flights, !(arr_delay>60 | dep_delay>60), year == 2013) 
+# A tibble: 295,893 × 19
+    year month   day dep_time sched_dep_time dep_delay arr_time sched_arr_time arr_delay carrier flight tailnum origin dest  air_time distance  hour
+   <int> <int> <int>    <int>          <int>     <dbl>    <int>          <int>     <dbl> <chr>    <int> <chr>   <chr>  <chr>    <dbl>    <dbl> <dbl>
+ 1  2013     1     1      517            515         2      830            819        11 UA        1545 N14228  EWR    IAH        227     1400     5
+ 2  2013     1     1      533            529         4      850            830        20 UA        1714 N24211  LGA    IAH        227     1416     5
+ 3  2013     1     1      542            540         2      923            850        33 AA        1141 N619AA  JFK    MIA        160     1089     5
+ 4  2013     1     1      544            545        -1     1004           1022       -18 B6         725 N804JB  JFK    BQN        183     1576     5
+ 5  2013     1     1      554            600        -6      812            837       -25 DL         461 N668DN  LGA    ATL        116      762     6
+ 6  2013     1     1      554            558        -4      740            728        12 UA        1696 N39463  EWR    ORD        150      719     5
+ 7  2013     1     1      555            600        -5      913            854        19 B6         507 N516JB  EWR    FLL        158     1065     6
+ 8  2013     1     1      557            600        -3      709            723       -14 EV        5708 N829AS  LGA    IAD         53      229     6
+ 9  2013     1     1      557            600        -3      838            846        -8 B6          79 N593JB  JFK    MCO        140      944     6
+10  2013     1     1      558            600        -2      753            745         8 AA         301 N3ALAA  LGA    ORD        138      733     6
+# ℹ 295,883 more rows
+# ℹ 2 more variables: minute <dbl>, time_hour <dttm>
+# ℹ Use `print(n = ...)` to see more rows
+​
+Entire R code in the File
+HW2: Create Data.Frame and Write Tables into a Database server
+From pizza restaurant - SQL
+Create 3-5 dataframes in R => Write table into server (PostgreSQL)
+This section provides instructions and code snippets for connecting to a PostgreSQL database server, creating 6 Dataframes related to a pizza restaurant and writing into a server using R. The dataframes include information about the menu, tables, orders, billing, staff, and customers. The code also includes an example of retrieving data from the "menu" table.
+## connect to PostgreSQL server
+library(RPostgreSQL)
+library(tidyverse)
+library(tibble)
+
+## create connection
+con <- dbConnect(
+  PostgreSQL(),
+  host = "floppy.db.elephantsql.com",
+  dbname = "xbpewesl",
+  user = "xbpewesl",
+  password = #{insert password},
+  port = 5432
+)
+
+## db List Tables
+dbListTables(con)
+
+## create dataframe
+menu <- data.frame(
+  menu_id = c(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12),
+  menu_description = c("New Orleans & Sausage Pizza", "Pepperoni Pizza", "Vegetarian Pizza", 
+                      "Hawaiian Pizza", "Supreme Pizza", "Mixed Deluxe Pizza", "Seafood Deluxe Pizza", 
+                      "Bacon & Hokkaido Cheese Large Pizza", "Trio Chicken BBQ Pizza", "Trio Chicken BBQ Pizza", 
+                      "Trio Chicken BBQ Pizza", "Trio Turkey and Chicken Christmas Limited Edition Pizza"),
+  menu_size = c("Regular", "Small", "Large", "Regular", "Large", "Large", "Medium", "Large", "Small", "Medium", 
+               "Large", "Large"),
+  menu_crust = c("Thin Crust", "Pan Crust", "Stuffed Crust", "Thin Crust", "Pan Crust", "Stuffed Crust", 
+                "Pan Crust", "Stuffed Crust", "Thin Crust", "Pan Crust", "Stuffed Crust", "Stuffed Crust"),
+  menu_price = c(300.00, 320.00, 380.00, 380.00, 400.50, 420.00, 450.00, 480.00, 350.00, 380.00, 
+                420.00, 500.00)
+)
+
+table <- data.frame(
+  table_id = c(1, 2, 3, 4, 5, 6, 7, 8),
+  room_id = c(101, 101, 101, 101, 102, 102, 102, 102),
+  seat_amount = c(4, 6, 2, 2, 4, 6, 2, 2)
+)
+
+
+orders <- tribble(
+  ~order_id, ~menu_id, ~quantity, ~table_id, ~staff_id,
+  1, 1, 3, 1, 4,
+  2, 2, 1, 1, 4,
+  3, 1, 3, 2, 4,
+  4, 1, 1, 3, 3
+)
+
+
+billing <- data.frame(
+  bill_id = c(1, 1, 2, 3),
+  bill_time = as.POSIXct(c("2023-11-26 10:47:03", "2023-11-26 10:47:12", "2023-11-26 10:47:25", "2023-11-26 10:47:38")),
+  order_id = c(1, 2, 3, 4),
+  table_id = c(1, 1, 2, 3),
+  total_price = c(900, 320, 900, 300),
+  customer_id = c(1, 1, NA, 2)
+)
+
+staff <- data.frame(
+  staff_id = c(1, 2, 3, 4, 5),
+  staff_firstname = c("Hermione", "Severus", "Harry", "Ron", "Albus"),
+  staff_lastname = c("Granger", "Snape", "Potter", "Weasley", "Dumbledore"),
+  staff_role = c("Manager", "Chef", "Waiter", "Waiter", "Dish Washer"),
+  shift_time = c("AllDay", "AllDay", "Morning", "Afternoon", "AllDay")
+)
+
+customers <- data.frame(
+  customer_id = c(1, 2, 3, 4, 5, 6, 7),
+  first_name = c("Srettha", "Chadchart", "Prayut", "Pita", "Paetongtarn", "Lisa", "Gam"),
+  last_name = c("Thavisin", "Sittipunt", "Chan-o-cha", "Limjaroenrat", "Shinawatra", "Manoban", "Wichayanee"),
+  mobile_number = c("0812345678", "0812345679", "0812345670", "0812345671", "0812345672", "0812345675", "0812345676"),
+  facebook_id = c("srettha.thavisin", "chadchart.sittipunt", "prayut.chanocha", "pita.limjaroenrat", "paetongtarn.shinawatra", "lisa.blackpink", "gam.wichayanee")
+)
+
+
+## create table on database
+
+dbWriteTable(con, "menu", menu, overwrite = TRUE)
+dbWriteTable(con, "table", table, overwrite = TRUE)
+dbWriteTable(con, "orders", orders, overwrite = TRUE)
+dbWriteTable(con, "customers", customers, overwrite = TRUE)
+dbWriteTable(con, "staff", staff, overwrite = TRUE)
+dbWriteTable(con, "billing", billing, overwrite = TRUE)
+dbListTables(con)
+
+## get data
+menu_name <- dbGetQuery(con, "select menu_id, menu_description from menu")
+menu_name
