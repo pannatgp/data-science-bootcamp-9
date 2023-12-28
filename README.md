@@ -4,7 +4,7 @@ by p'Toy FB: DataRockie
 I attended a bootcamp called 'data-science-bootcamp-9', lectured, guided and inspired by p'Toy DataRockie.
 Here is the repository to store the assignments from the comprehensive bootcamp.
 
-On Dec 2023, I've gone to a half way of the bootcamp-9. It is planned to finished in 2024 first Quarter.
+On Dec 2023, I've gone through a half way of the bootcamp-9. It is planned to finished in 2024 first Quarter.
 Here are some assignments:
 - sql
 - r
